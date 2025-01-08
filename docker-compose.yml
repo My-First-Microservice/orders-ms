@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  orders_db:
+    container_name: orders_db
+    image: postgres:latest
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=12345
+      - POSTGRES_DB=orders
