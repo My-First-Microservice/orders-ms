@@ -25,6 +25,7 @@
     "@nestjs/mapped-types": "^2.0.6",
     "@nestjs/microservices": "^10.4.15",
     "@nestjs/platform-express": "^10.0.0",
+    "@prisma/client": "^6.2.1",
     "dotenv": "^16.4.7",
     "joi": "^17.13.3",
     "reflect-metadata": "^0.2.0",
