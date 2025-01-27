@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["datasource", "postgresql", "uuid"]
+  "cSpell.words": [
+    "datasource",
+    "johndoe",
+    "mydb",
+    "nats",
+    "postgresql",
+    "randompassword",
+    "uuid"
+  ]
 }
