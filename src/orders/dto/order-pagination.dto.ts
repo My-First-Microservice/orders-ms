@@ -14,9 +14,9 @@ export class OrderPaginationDto {
   @Type(() => Number)
   limit?: number = 10;
 
-  @IsOptional()
   @IsEnum(OrderStatusList, {
     message: `Valid status are ${OrderStatusList}`,
   })
+  @IsOptional()
   status: OrderStatus;
 }

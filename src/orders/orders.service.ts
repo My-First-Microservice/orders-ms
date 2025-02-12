@@ -7,6 +7,8 @@ import { ChangeOrderStatusDto } from './dto/change-order-status.dto';
 import { NATS_SERVICE } from 'src/config/services';
 import { firstValueFrom } from 'rxjs';
 import { Product } from 'src/common/interfaces/product';
+import { OrderWithProducts } from './interfaces/order-with-products.interface';
+import { OrderPaidDto } from './dto/order-paid.dto';
 
 @Injectable()
 export class OrdersService extends PrismaClient implements OnModuleInit {
@@ -161,5 +163,34 @@ export class OrdersService extends PrismaClient implements OnModuleInit {
       this.client.send({ cmd: 'validate_products' }, ids),
     );
     return products;
+  }
+
+  async createPaymentSession(order: OrderWithProducts){
+    const paymentSession = await firstValueFrom(
+      this.client.send('create.payment.session', {
+        orderId: order.id,
+        currency: "usd",
+        items: order.OrderItem.map(({productId, ...restItem}) => restItem)
+      })
+    )
+
+    return paymentSession;
+  }
+
+  async orderPaid(orderPaidDto: OrderPaidDto){
+    await this.order.update({
+      where: { id: orderPaidDto.orderId },
+      data: {
+        status: "PAID",
+        paid: true,
+        paidAt: new Date(),
+        stripeChargeId: orderPaidDto.stripePaymentId,
+        OrderReceipt: {
+          create: {
+            receiptUrl: orderPaidDto.receiptUrl
+          }
+        }
+      }
+    })
   }
 }
