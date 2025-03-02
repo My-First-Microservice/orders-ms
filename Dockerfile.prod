@@ -1,0 +1,42 @@
+# Dependencias
+FROM node:21-alpine3.19 AS deps
+
+WORKDIR /usr/src/app
+
+COPY ./package*.json ./
+
+RUN npm install
+
+# Builder
+FROM node:21-alpine3.19 AS build
+
+ARG ORDERS_MS_DATABASE_URL
+ENV DATABASE_URL=${ORDERS_MS_DATABASE_URL}
+
+WORKDIR /usr/src/app
+
+# Copiar de deps, los módulos de node
+COPY --from=deps /usr/src/app/node_modules  ./node_modules
+COPY . .
+
+
+RUN npx prisma migrate deploy
+RUN npm run build
+RUN npm ci -f --only=production  && npm cache clean --force
+
+# Production
+FROM node:21-alpine3.19 AS production
+
+WORKDIR /usr/src/app
+
+# Copiar los módulos de node, la carpeta de Prisma y la carpeta de distribución
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
+
+ENV NODE_ENV=production 
+
+USER node
+
+EXPOSE 3000
+
+CMD [ "node", 'dist/main.js' ]
