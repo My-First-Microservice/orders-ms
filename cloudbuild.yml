@@ -13,7 +13,8 @@ steps:
         'push',
         'northamerica-south1-docker.pkg.dev/nestjs-microservices-458108/docker-registry/orders-ms',
       ]
-
+options:
+  logging: CLOUD_LOGGING_ONLY
 availableSecrets:
   secretManager:
     - versionName: projects/925734115329/secrets/orders-ms-database-url/versions/1
