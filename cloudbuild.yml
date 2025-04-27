@@ -4,7 +4,7 @@ steps:
     args:
       - -c
       - |
-        docker build -t northamerica-south1-docker.pkg.dev/nestjs-microservices-458108/docker-registry/orders-ms -f Dockerfile.prod --platform=linux/amd64 --build-arg ORDERS_DATABASE_URL=$$DATABASE_URL .
+        docker build -t northamerica-south1-docker.pkg.dev/nestjs-microservices-458108/docker-registry/orders-ms -f Dockerfile.prod --platform=linux/amd64 --build-arg ORDERS_MS_DATABASE_URL=$$DATABASE_URL .
     secretEnv: ['DATABASE_URL']
 
   - name: 'gcr.io/cloud-builders/docker'
