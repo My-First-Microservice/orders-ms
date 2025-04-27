@@ -1,5 +1,5 @@
 # Dependencias
-FROM node:21-alpine3.19 AS deps
+FROM node:23-alpine3.20 AS deps
 
 WORKDIR /usr/src/app
 
@@ -8,7 +8,7 @@ COPY ./package*.json ./
 RUN npm install
 
 # Builder
-FROM node:21-alpine3.19 AS build
+FROM node:23-alpine3.20 AS build
 
 ARG ORDERS_MS_DATABASE_URL
 ENV DATABASE_URL=${ORDERS_MS_DATABASE_URL}
@@ -25,7 +25,7 @@ RUN npm run build
 RUN npm ci -f --only=production  && npm cache clean --force
 
 # Production
-FROM node:21-alpine3.19 AS production
+FROM node:23-alpine3.20 AS production
 
 WORKDIR /usr/src/app
 
